@@ -8,6 +8,7 @@ export default {
     pressupostos: 'Pressupostos',
     areaSocis: 'Àrea de socis',
     logout: 'Eixir',
+    login: 'Entrar',
     estatuts: 'Estatuts',
     reglament: 'Reglament de funcionament intern'
   },

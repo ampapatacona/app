@@ -1,8 +1,12 @@
 <template>
   <div>
-    <div id="firebaseui-auth-container" />
-    <div v-if="loading" class="loader-wrapper">
-      <div class="loader is-loading"></div>
+    <div id="firebaseui-auth-container">
+      <div v-if="loading" class="loader-wrapper">
+        <q-spinner-cube
+          color="orange"
+          size="5.5em"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -61,7 +65,9 @@ export default {
           callbacks: {
             signInSuccessWithAuthResult () {
               // console.log('signInSuccessWithAuthResult')
-              vm.$store.dispatch('user/AUTH_CHECK')
+              // vm.$store.dispatch('user/AUTH_CHECK')
+              vm.loading = true
+              // vm.$router.replace('/')
             },
             uiShown () {
               // console.log('uiShown')

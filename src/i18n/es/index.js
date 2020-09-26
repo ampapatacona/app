@@ -8,6 +8,7 @@ export default {
     pressupostos: 'Presupuestos',
     areaSocis: 'Area de socios',
     logout: 'Salir',
+    login: 'Entrar',
     estatuts: 'Estatutos',
     reglament: 'Reglamento de funcionamento interno'
   },
