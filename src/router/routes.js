@@ -5,7 +5,16 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'test', component: () => import('pages/Test.vue') }
+      { path: 'login', component: () => import('pages/Login.vue') }
+    ]
+  },
+
+  {
+    path: '/panel',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      { path: '', component: () => import('pages/panel/Index.vue') }
     ]
   },
 

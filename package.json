@@ -16,11 +16,15 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
+    "firebase": "^7.21.1",
+    "firebaseui": "^4.6.1",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.21.1"
+    "vue-i18n": "^8.21.1",
+    "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
+    "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",

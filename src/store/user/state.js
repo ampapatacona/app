@@ -1,5 +1,6 @@
 export default function () {
   return {
-    hello: 'world'
+    user: null,
+    token: null
   }
 }

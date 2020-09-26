@@ -1,4 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
+const axiosInstance = axios.create({
+  baseURL: process.env.SERVER_URL
+})
 
-Vue.prototype.$axios = axios
+// for use inside Vue files through this.$axios
+Vue.prototype.$axios = axiosInstance
+
+export { axiosInstance }
