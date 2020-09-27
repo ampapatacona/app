@@ -3,18 +3,18 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'login', component: () => import('pages/Login.vue') }
+      { path: 'profile', component: () => import('pages/Profile.vue') }
     ]
   },
 
   {
-    path: '/panel',
+    path: '/login',
     component: () => import('layouts/MainLayout.vue'),
-    meta: { requiresAuth: true },
     children: [
-      { path: '', component: () => import('pages/panel/Index.vue') }
+      { path: '', component: () => import('pages/Login.vue') }
     ]
   },
 

@@ -30,23 +30,23 @@
       >
         <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
           <q-list padding>
-            <q-item clickable v-ripple>
+            <q-item to="/" clickable v-ripple exact>
               <q-item-section avatar>
-                <q-icon name="inbox" />
+                <q-icon name="home" />
               </q-item-section>
 
               <q-item-section>
-                Inbox
+                Inici
               </q-item-section>
             </q-item>
 
-            <q-item active clickable v-ripple>
+            <q-item to="/profile" clickable v-ripple>
               <q-item-section avatar>
-                <q-icon name="star" />
+                <q-icon name="account_circle" />
               </q-item-section>
 
               <q-item-section>
-                Star
+                Profile
               </q-item-section>
             </q-item>
 
@@ -75,7 +75,7 @@
         <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
           <div v-if="$store.state.user.user" class="absolute-bottom bg-transparent">
             <q-avatar size="56px" class="q-mb-sm">
-              <img :src="$store.state.user.user.photoURL ? $store.state.user.user.photoURL : 'https://cdn.quasar.dev/img/boy-avatar.png'">
+              <img :src="$store.state.user.user.photoURL ? $store.state.user.user.photoURL : '/icons/icon-128x128.png'">
             </q-avatar>
             <div class="text-weight-bold">{{$store.state.user.user.email}}</div>
           </div>

@@ -30,6 +30,7 @@ export { auth }
 export const store = firebase.firestore() */
 
 export default ({ urlPath, redirect, store, router }) => {
+  // routerGuard()
   auth.onAuthStateChanged(async (firebaseUser) => {
     routerGuard(firebaseUser)
     if (firebaseUser) {
@@ -54,14 +55,22 @@ export default ({ urlPath, redirect, store, router }) => {
       // console.log('ja no hi ha usuari')
       routerGuard(firebaseUser)
       store.dispatch('user/LOGOUT')
+      const redirectUrl = router.currentRoute.path
+      if (!urlPath.startsWith('/login')) {
+        redirect({
+          path: '/login',
+          query: { redirect: redirectUrl }
+        })
+      }
     }
   })
 
   // Router guard
   function routerGuard (firebaseUser) {
-    router.beforeEach(async (to, from, next) => {
-      const user = firebaseUser
-      const redirect = to.fullPath.substr(1)
+    return router.beforeEach(async (to, from, next) => {
+      const user = firebaseUser || store.state.user.user
+      console.log('user des de router guard', user)
+      const redirectUrl = to.fullPath.substr(1)
       if (to.name === 'login' && user) next({ path: '/' }) // prevents going to login if there is a user already
       const requireScope = to.matched.some(record => record.meta.requiresScope)
       const requireAuth = to.matched.some(record => record.meta.requiresAuth)
@@ -71,10 +80,11 @@ export default ({ urlPath, redirect, store, router }) => {
         if (!user) {
           next({
             path: '/login',
-            query: { redirect: redirect }
+            query: { redirect: redirectUrl }
           })
-        } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
-          next('/verifyEmail')
+        // } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
+        //   next('/verifyEmail')
+        //
         } else {
           if (requireScope) {
             const permissionRequired = to.matched.find(record => record.meta.requiresScope).meta.requiresScope
