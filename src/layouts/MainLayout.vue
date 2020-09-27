@@ -70,6 +70,18 @@
               </q-item-section>
             </q-item>
           </q-list>
+          <q-list v-if="$store.state.user.user && $store.state.user.user.role === 'admin'">
+            <q-separator />
+            <q-item to="/admin" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="dashboard" />
+              </q-item-section>
+
+              <q-item-section>
+                Admin
+              </q-item-section>
+            </q-item>
+          </q-list>
         </q-scroll-area>
 
         <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">

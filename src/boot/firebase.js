@@ -30,16 +30,14 @@ export { auth }
 export const store = firebase.firestore() */
 
 export default ({ urlPath, redirect, store, router }) => {
-  // routerGuard()
   auth.onAuthStateChanged(async (firebaseUser) => {
-    routerGuard(firebaseUser)
     if (firebaseUser) {
       let token = await firebaseUser.getIdToken(true)
       const tokenResult = await firebaseUser.getIdTokenResult(true)
       const hasuraClaim = tokenResult.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] : null
       const { uid, email, emailVerified, photoURL } = firebaseUser
       if (hasuraClaim) {
-        const user = { uid, email, emailVerified, photoURL, token }
+        const user = { uid, email, emailVerified, photoURL, token, role: hasuraClaim['x-hasura-default-role'] }
         return store.commit('user/SET_USER', user)
       }
       const refreshTokenResult = await axiosInstance.post('/refresh-token', { uid, email })
@@ -53,59 +51,16 @@ export default ({ urlPath, redirect, store, router }) => {
       }
     } else {
       // console.log('ja no hi ha usuari')
-      routerGuard(firebaseUser)
-      store.dispatch('user/LOGOUT')
-      const redirectUrl = router.currentRoute.path
-      if (!urlPath.startsWith('/login')) {
-        redirect({
-          path: '/login',
-          query: { redirect: redirectUrl }
-        })
+      if (store.state.user.user) {
+        store.dispatch('user/LOGOUT')
       }
+      // const redirectUrl = router.currentRoute.path
+      // if (!urlPath.startsWith('/login')) {
+      //   redirect({
+      //     path: '/login',
+      //     query: { redirect: redirectUrl }
+      //   })
+      // }
     }
   })
-
-  // Router guard
-  function routerGuard (firebaseUser) {
-    return router.beforeEach(async (to, from, next) => {
-      const user = firebaseUser || store.state.user.user
-      console.log('user des de router guard', user)
-      const redirectUrl = to.fullPath.substr(1)
-      if (to.name === 'login' && user) next({ path: '/' }) // prevents going to login if there is a user already
-      const requireScope = to.matched.some(record => record.meta.requiresScope)
-      const requireAuth = to.matched.some(record => record.meta.requiresAuth)
-      if (requireAuth || requireScope) {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
-        if (!user) {
-          next({
-            path: '/login',
-            query: { redirect: redirectUrl }
-          })
-        // } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
-        //   next('/verifyEmail')
-        //
-        } else {
-          if (requireScope) {
-            const permissionRequired = to.matched.find(record => record.meta.requiresScope).meta.requiresScope
-            // console.log('scope required', permissionRequired)
-            // const idToken = await user.getIdToken(true)
-            const tokenResult = await user.getIdTokenResult(true)
-            const permissionsGranted = tokenResult['https://hasura.io/jwt/claims']['x-hasura-default-role']
-            if (permissionsGranted && permissionsGranted.includes(permissionRequired)) {
-              next()
-            } else {
-              next({
-                path: '/'
-              })
-            }
-          } else {
-            next() // requiresAuth passed
-          }
-        }
-      } else {
-        next() // make sure to always call next()!
-      }
-    })
-  } // End router guard
 }

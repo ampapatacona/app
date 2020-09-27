@@ -18,6 +18,15 @@ const routes = [
     ]
   },
 
+  {
+    path: '/admin',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresScope: 'admin', requiresAuth: true },
+    children: [
+      { path: '', component: () => import('pages/admin/Index.vue') }
+    ]
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
