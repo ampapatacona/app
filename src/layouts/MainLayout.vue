@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          AMPA
         </q-toolbar-title>
 
         <div>
