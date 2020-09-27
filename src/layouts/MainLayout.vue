@@ -16,8 +16,8 @@
         </q-toolbar-title>
 
         <div>
-          <q-btn v-if="$store.state.user.token" flat rounded @click="$store.dispatch('user/LOGOUT')">{{$t('menu.logout')}}</q-btn>
-          <q-btn v-if="!$store.state.user.token" to="/login" flat rounded>{{$t('menu.login')}}</q-btn>
+          <q-btn v-if="$store.state.user.user" flat rounded @click="$store.dispatch('user/LOGOUT')">{{$t('menu.logout')}}</q-btn>
+          <q-btn v-if="!$store.state.user.user" to="/login" flat rounded>{{$t('menu.login')}}</q-btn>
         </div>
       </q-toolbar>
     </q-header>

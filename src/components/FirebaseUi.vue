@@ -58,17 +58,11 @@ export default {
               fullLabel: `${vm.message} Google`
             }
           ],
-          signInSuccessUrl: '/',
+          signInSuccessUrl: vm.$route.query.redirect || '/',
           tosUrl: '/tos/',
           credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
           privacyPolicyUrl: '/privacy-policy/',
           callbacks: {
-            signInSuccessWithAuthResult () {
-              // console.log('signInSuccessWithAuthResult')
-              // vm.$store.dispatch('user/AUTH_CHECK')
-              vm.loading = true
-              // vm.$router.replace('/')
-            },
             uiShown () {
               // console.log('uiShown')
               vm.loading = false

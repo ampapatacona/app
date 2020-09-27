@@ -19,7 +19,6 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'routerGuard',
       'i18n',
       'axios',
       'firebase'
@@ -118,13 +117,13 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'AMPA app',
-        short_name: 'AMPA app',
+        name: 'AMPA CEIP La Patacona',
+        short_name: 'AMPA',
         description: 'AMPA CEIP Patacona app',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
-        theme_color: '#027be3',
+        theme_color: '#ff8000',
         icons: [
           {
             src: 'icons/icon-128x128.png',

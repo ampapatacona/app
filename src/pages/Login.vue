@@ -1,5 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page padding>
+    <h2 class="text-center">Login</h2>
     <firebase-ui :message="$t('login.enter')" />
   </q-page>
 </template>
