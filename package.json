@@ -11,7 +11,8 @@
     "build:pwa": "quasar build -m pwa",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "icons": "icongenie generate -m pwa -i src/assets/logo.png"
+    "icons": "icongenie generate -m pwa -i src/assets/logo.png",
+    "deploy": "yarn build:pwa && firebase deploy"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
