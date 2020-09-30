@@ -49,10 +49,10 @@ export default function ({ store }) {
         } else {
           if (requireScope) {
             const permissionRequired = to.matched.find(record => record.meta.requiresScope).meta.requiresScope
-            console.log('scope required', permissionRequired)
+            // console.log('scope required', permissionRequired)
             // const idToken = await user.getIdToken(true)
             const tokenResult = await user.getIdTokenResult(true)
-            console.log('tokenResult', tokenResult)
+            // console.log('tokenResult', tokenResult)
             const permissionsGranted = tokenResult.claims['https://hasura.io/jwt/claims']['x-hasura-default-role']
             if (permissionsGranted && permissionsGranted.includes(permissionRequired)) {
               next()

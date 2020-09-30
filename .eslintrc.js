@@ -64,6 +64,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
+    "no-console": ["warn", { allow: ["warn", "error"] }],
 
 
     // allow debugger during development only
