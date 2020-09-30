@@ -32,6 +32,10 @@ export const store = firebase.firestore() */
 export default ({ urlPath, redirect, store, router }) => {
   auth.onAuthStateChanged(async (firebaseUser) => {
     if (firebaseUser) {
+      if (!firebaseUser.emailVerified) {
+        // console.log('Email is not verified')
+        firebaseUser.sendEmailVerification()
+      }
       let token = await firebaseUser.getIdToken(true)
       const tokenResult = await firebaseUser.getIdTokenResult(true)
       const hasuraClaim = tokenResult.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] : null

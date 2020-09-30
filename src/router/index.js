@@ -30,7 +30,7 @@ export default function ({ store }) {
   Router.beforeEach(async (to, from, next) => {
     auth.onAuthStateChanged(async (firebaseUser) => {
       const user = firebaseUser
-      console.log('user des de router guard', user)
+      // console.log('user des de router guard', user)
       const redirectUrl = to.fullPath.substr(1)
       if (to.name === 'login' && user) next({ path: '/' }) // prevents going to login if there is a user already
       const requireScope = to.matched.some(record => record.meta.requiresScope)
