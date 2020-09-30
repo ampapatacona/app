@@ -24,8 +24,10 @@ export const authProviders = {
   email: firebase.auth.EmailAuthProvider.PROVIDER_ID
 }
 const auth = firebase.auth()
+
 Vue.prototype.$auth = firebase.auth()
 export { auth }
+
 /* export const db = firebase.database()
 export const store = firebase.firestore() */
 
