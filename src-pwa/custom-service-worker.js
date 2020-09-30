@@ -4,6 +4,7 @@
  * is picked up by the build system ONLY if
  * quasar.conf > pwa > workboxPluginMode is set to "InjectManifest"
  */
+import {precacheAndRoute} from 'workbox-precaching'
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
     console.log('skipwaiting called')
@@ -52,4 +53,6 @@ self.addEventListener('notificationclick', function (event) {
   )
 })
 
-workbox.precaching.precacheAndRoute(self.__precacheManifest || [])
+precacheAndRoute(self.__WB_MANIFEST || [])
+
+// workbox.precaching.precacheAndRoute(self.__precacheManifest || [])
