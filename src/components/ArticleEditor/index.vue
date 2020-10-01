@@ -176,6 +176,9 @@ export default {
   label {
     margin-bottom: 2rem;
   }
+  .title-input{
+    margin-bottom:0;
+  }
 
 }
 </style>
