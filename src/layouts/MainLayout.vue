@@ -70,7 +70,7 @@
               </q-item-section>
             </q-item>
           </q-list>
-          <q-list v-if="$store.state.user.user && $store.state.user.user.role === 'admin'">
+          <q-list v-if="isAdmin">
             <q-separator />
             <q-item to="/admin" clickable v-ripple>
               <q-item-section avatar>
@@ -79,6 +79,15 @@
 
               <q-item-section>
                 Admin
+              </q-item-section>
+            </q-item>
+            <q-item to="/admin/article/add" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="dashboard" />
+              </q-item-section>
+
+              <q-item-section>
+                Add article
               </q-item-section>
             </q-item>
           </q-list>
@@ -90,6 +99,11 @@
               <img :src="$store.state.user.user.photoURL ? $store.state.user.user.photoURL : '/icons/icon-128x128.png'">
             </q-avatar>
             <div class="text-weight-bold">{{$store.state.user.user.email}}</div>
+            <div v-if="isAdmin">
+              <q-badge color="primary">
+                  Administrador
+              </q-badge>
+            </div>
           </div>
         </q-img>
       </q-drawer>
@@ -153,6 +167,11 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
+    }
+  },
+  computed: {
+    isAdmin () {
+      return this.$store.state.user.user && this.$store.state.user.user.role === 'admin'
     }
   }
 }

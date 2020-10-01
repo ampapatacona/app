@@ -1,0 +1,35 @@
+mutation MyMutation($author_id: String = "", $image: String = "", $status: article_statuses_enum = DRAFT, $created_at: timestamptz = "", $contentca: String = "", $titleca: String = "", $contentes: String = "", $titlees: String ="") {
+  insert_articles_one(object: 
+    { 
+      author_id: $author_id, 
+      image: $image,
+      status: $status,
+      created_at: $created_at,
+      translations: 
+        {
+         data: [
+            { 
+              content: $contentes, 
+              language: es 
+              title: $titlees
+            },
+            { 
+              content: $contentca, 
+              language: ca 
+              title: $titleca
+            }
+          ],
+          on_conflict: {
+            constraint: articles_translations_pkey,
+            update_columns: [content, title]
+            }
+        }
+    },
+    on_conflict: {
+      constraint: articles_pkey,
+      update_columns: [image, status, created_at]
+      }
+    ) {
+    id
+  }
+}

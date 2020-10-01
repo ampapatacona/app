@@ -5,5 +5,8 @@
     "common_root_object": "none",
     "create_env_files": false,
     "add_env_to_gitignore": true
+  },
+  "@quasar/apollo": {
+    "graphql_uri": "https://db.ampatacona.com/v1/graphql"
   }
 }

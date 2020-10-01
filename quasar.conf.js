@@ -37,7 +37,7 @@ module.exports = function (/* ctx */) {
       // 'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
-      // 'line-awesome',
+      'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
@@ -79,6 +79,23 @@ module.exports = function (/* ctx */) {
             { loader: '@kazupon/vue-i18n-loader' }
           ]
         })
+      },
+      chainWebpack (chain, { isServer, isClient }) {
+        chain.module.rule('vue')
+          .use('vue-loader')
+          .loader('vue-loader')
+          .tap(options => {
+            options.transpileOptions = {
+              transforms: {
+                dangerousTaggedTemplateString: true
+              }
+            }
+            return options
+          })
+        chain.module.rule('gql')
+          .test(/\.(graphql|gql)$/)
+          .use('graphql-tag/loader')
+          .loader('graphql-tag/loader')
       }
     },
 

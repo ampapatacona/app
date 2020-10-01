@@ -15,18 +15,25 @@
     "deploy": "yarn build:pwa && firebase deploy"
   },
   "dependencies": {
+    "@apollo/client": "^3.2.1",
     "@quasar/extras": "^1.0.0",
+    "apollo-link-ws": "^1.0.20",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
     "firebase": "^7.21.1",
     "firebaseui": "^4.6.1",
     "quasar": "^1.0.0",
+    "subscriptions-transport-ws": "^0.9.18",
+    "tiptap": "^1.30.0",
+    "tiptap-extensions": "^1.33.1",
     "vue-i18n": "^8.21.1",
-    "vuex-persistedstate": "^3.1.0"
+    "vuex-persistedstate": "^3.1.0",
+    "websocket": "^1.0.32"
   },
   "devDependencies": {
     "@kazupon/vue-i18n-loader": "^0.5.0",
     "@quasar/app": "^2.0.0",
+    "@quasar/quasar-app-extension-apollo": "^1.0.0-beta.6",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",

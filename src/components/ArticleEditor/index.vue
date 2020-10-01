@@ -1,5 +1,10 @@
 <template>
-  <form ref="form">
+  <form class="article-editor">
+    <div class="row">
+      <div class="col-12">
+        <q-input borderless ref="title" class="title-input" v-model="article.translations.find(t => t.language === lang).title" :label="$t('title')" :rules="[val => !!val || 'Field is required']" />
+      </div>
+    </div>
     <div class="row">
       <div class="col-12 col-md-6">
         <q-input filled v-model="article.date">
@@ -35,12 +40,11 @@
       </div>
     </div>
     <div class="row">
-
-      <div class="col-12 col-md-8">
-        <q-input ref="title" outlined v-model="article.translations.find(t => t.language === lang).title" :label="$t('title')" :rules="[val => !!val || 'Field is required']" />
-      </div>
-      <div class="col-12 col-md-8">
+      <!-- <div class="col-12 col-md-8">
         <q-editor ref="content" :definitions="definitions" :toolbar="toolbar" v-model="article.translations.find(t => t.language === lang).content" min-height="10rem" />
+      </div> -->
+      <div class="col-12">
+        <content-editor v-model="article.translations.find(t => t.language === lang).content" @input="content" />
       </div>
 
     </div>
@@ -82,13 +86,16 @@
 </i18n>
 
 <script>
-import FirebaseUploader from 'src/components/FirebaseUploader.js'
+import FirebaseUploader from './FirebaseUploader.js'
+import ContentEditor from './ContentEditor'
 
 export default {
   name: 'ArticleEditor',
   components: {
-    FirebaseUploader
+    FirebaseUploader,
+    ContentEditor
   },
+
   data () {
     return {
       image: null,
@@ -98,35 +105,6 @@ export default {
       langOptions: [
         { label: 'Valencià', value: 'ca' },
         { label: 'Castellano', value: 'es' }
-      ],
-      definitions: {
-        // save: {
-        //   tip: 'Save your work',
-        //   icon: 'save',
-        //   label: 'Save',
-        //   handler: saveWork
-        // },
-        // upload: {
-        //   tip: 'Upload to cloud',
-        //   icon: 'cloud_upload',
-        //   label: 'Upload',
-        //   handler: uploadIt
-        // }
-      },
-      toolbar: [
-        ['left', 'center', 'right', 'justify'],
-        ['bold', 'italic', 'underline', 'strike'],
-        ['undo', 'redo'],
-        ['unordered', 'ordered'],
-        [
-          {
-            label: this.$q.lang.editor.formatting,
-            icon: this.$q.iconSet.editor.formatting,
-            list: 'no-icons',
-            options: ['h2', 'h3', 'p']
-          }
-        ],
-        ['link']
       ]
     }
   },
@@ -140,6 +118,13 @@ export default {
     }
   },
   methods: {
+    content (val) {
+      // console.log(val)
+      const lang = this.lang
+      if (this.article) {
+        this.article.translations.find(t => t.language === lang).content = val
+      }
+    },
     guardar () {
       if (!this.validation) return
       const article = this.article
@@ -165,8 +150,18 @@ export default {
 }
 </script>
 
-<style scoped>
-label {
-  margin-bottom: 2rem;
+<style lang="scss">
+
+.title-input, .title-input .q-field__label {
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    height: 5rem;
+  }
+.article-editor {
+
+  label {
+    margin-bottom: 2rem;
+  }
+
 }
 </style>
