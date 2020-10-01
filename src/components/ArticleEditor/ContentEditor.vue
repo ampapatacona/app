@@ -159,7 +159,7 @@
       </div>
     </editor-menu-bar>
 
-    <editor-content class="editor__content" :editor="editor" />
+    <editor-content :editor="editor" />
   </div>
 </template>
 
@@ -182,7 +182,8 @@ import {
   Link,
   Strike,
   Underline,
-  History
+  History,
+  Placeholder
 } from 'tiptap-extensions'
 export default {
   components: {
@@ -209,7 +210,8 @@ export default {
         new Italic(),
         new Strike(),
         new Underline(),
-        new History()
+        new History(),
+        new Placeholder({ emptyNodeText: this.$t('placeholder') })
       ],
       content: this.value,
       onUpdate: ({ getHTML }) => {
@@ -239,11 +241,29 @@ export default {
   }
 }
 </script>
+<i18n>
+{
+  "ca": {
+    "placeholder": "Escriu alguna cosa ací..."
+  },
+  "es": {
+    "placeholder": "Escribe algo aquí..."
+  }
+}
+</i18n>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
 .ProseMirror{
   min-height: 300px;
   padding: 1rem;
+}
+
+p.is-empty:first-child::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: lightgray;
+  pointer-events: none;
+  height: 0;
 }
 
 $color-black: rgb(32, 32, 32);

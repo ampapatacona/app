@@ -2,16 +2,17 @@
   <form class="article-editor">
     <div class="row">
       <div class="col-12">
-        <q-input borderless ref="title" class="title-input" v-model="article.translations.find(t => t.language === lang).title" :label="$t('title')" :rules="[val => !!val || 'Field is required']" />
+        <q-input borderless ref="title" class="title-input" v-model="article.translations.find(t => t.language === lang).title" :placeholder="$t('title')" :rules="[val => !!val || $t('required')]" />
       </div>
     </div>
+
     <div class="row">
       <div class="col-12 col-md-6">
-        <q-input filled v-model="article.date">
+        <q-input filled v-model="article.created_at">
           <template v-slot:prepend>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date v-model="article.date" mask="YYYY-MM-DD HH:mm">
+                <q-date v-model="article.created_at" mask="YYYY-MM-DD HH:mm">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -23,7 +24,7 @@
           <template v-slot:append>
             <q-icon name="access_time" class="cursor-pointer">
               <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-time v-model="article.date" mask="YYYY-MM-DD HH:mm" format24h>
+                <q-time v-model="article.created_at" mask="YYYY-MM-DD HH:mm" format24h>
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -34,9 +35,27 @@
         </q-input>
       </div>
     </div><!--  datetime row -->
-    <div class="row">
-      <div class="col-12 col-md-4">
+
+    <div class="row" v-if="article.image">
+      <q-img
+      :src="article.image"
+      style="height: 140px; max-width: 150px"
+      >
+      </q-img>
+    </div>
+
+    <div class="row" v-if="!article.image">
+      <div class="col">
+        <firebase-uploader @added="imageAdded" @removed="imageRemoved" @upload="uploadImage" :label="$t('image')" ref="uploader" hide-upload-btn></firebase-uploader>
+      </div>
+    </div>
+
+    <div class="row q-col-gutter-sm">
+      <div class="col-xs-12 col-sm-6">
         <q-select outlined v-model="lang" :options="langOptions" label="Idioma" emit-value map-options />
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <q-select outlined v-model="article.status" :options="statusOptions" label="Status" emit-value map-options />
       </div>
     </div>
     <div class="row">
@@ -49,24 +68,6 @@
 
     </div>
 
-    <div class="row">
-      <q-img
-      :src="article.image"
-      style="height: 140px; max-width: 150px"
-    >
-      <template v-slot:loading>
-        <div class="absolute-full flex flex-center bg-primary text-white">
-          Imatge de portada
-        </div>
-      </template>
-    </q-img>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <firebase-uploader @added="imageAdded" @removed="imageRemoved" @upload="uploadImage" :label="$t('image')" ref="uploader" hide-upload-btn></firebase-uploader>
-      </div>
-    </div>
     <q-btn @click="guardar">{{$t('save')}}</q-btn>
   </form>
 </template>
@@ -75,12 +76,18 @@
   "ca": {
     "title": "Títol",
     "save": "Desa",
-    "image": "Imatge de portada"
+    "image": "Imatge de portada",
+    "required": "Aquest camp és obligatori",
+    "draft": "Esborrany",
+    "published": "Publicat"
   },
   "es": {
     "title": "Título",
     "save": "Guardar",
-    "image": "Imagen de portada"
+    "image": "Imagen de portada",
+    "required": "Este campo es obligatorio",
+    "draft": "Borrador",
+    "published": "Publicado"
   }
 }
 </i18n>
@@ -105,6 +112,10 @@ export default {
       langOptions: [
         { label: 'Valencià', value: 'ca' },
         { label: 'Castellano', value: 'es' }
+      ],
+      statusOptions: [
+        { label: this.$t('draft'), value: 'DRAFT' },
+        { label: this.$t('published'), value: 'PUBLISHED' }
       ]
     }
   },
@@ -151,11 +162,14 @@ export default {
 </script>
 
 <style lang="scss">
+.q-uploader {
+  margin-bottom: 1rem;
+}
 
-.title-input, .title-input .q-field__label {
+.title-input {
     font-size: 2.5rem;
     line-height: 2.5rem;
-    height: 5rem;
+    color: lightgray;
   }
 .article-editor {
 

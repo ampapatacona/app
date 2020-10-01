@@ -81,7 +81,7 @@
                 Admin
               </q-item-section>
             </q-item>
-            <q-item to="/admin/article/add" clickable v-ripple>
+            <q-item to="/admin/article/edit" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="dashboard" />
               </q-item-section>

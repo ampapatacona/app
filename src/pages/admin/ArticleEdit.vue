@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-      <article-editor @guardar="guardar" :article="article" :id="id"></article-editor>
+      <article-editor v-if="article" @guardar="guardar" :article="article" :id="id"></article-editor>
   </q-page>
 </template>
 
@@ -10,16 +10,38 @@ import { date } from 'quasar'
 import ArticleEditor from 'src/components/ArticleEditor/index'
 import addArticle from 'src/queries/addArticle.gql'
 import editArticle from 'src/queries/editArticle.gql'
+import articleById from 'src/queries/articleById.gql'
 
 export default {
   components: {
     ArticleEditor
   },
+  created () {
+    const id = this.$route.params.id
+    if (id) {
+      return this.$apollo.query({
+        query: articleById,
+        variables: {
+          id: id
+        }
+      })
+        .then(({ data }) => {
+          const article = data.articles_by_pk
+          const dateFormated = date.formatDate(new Date(article.created_at), 'YYYY-MM-DD HH:mm')
+          article.created_at = dateFormated
+          this.article = article
+          this.id = Number(id)
+        })
+    } else {
+      this.article = this.default
+    }
+  },
   data () {
     return {
       id: null,
-      article: {
-        date: date.formatDate(new Date(), 'YYYY-MM-DD HH:mm'),
+      article: null,
+      default: {
+        created_at: date.formatDate(new Date(), 'YYYY-MM-DD HH:mm'),
         author_id: this.$store.state.user ? this.$store.state.user.user.uid : null,
         image: null,
         status: 'DRAFT',
@@ -39,11 +61,19 @@ export default {
     }
   },
   methods: {
+    getArticle () {
+      this.$apollo.query({
+        query: articleById,
+        variables: {
+          id: this.id
+        }
+      })
+    },
     guardar (val) {
       let variables = {
         author_id: this.article.author_id,
         image: this.article.image,
-        created_at: new Date(this.article.date),
+        created_at: new Date(this.article.created_at),
         status: this.article.status,
         titleca: this.translatedArticle('ca').title,
         contentca: this.translatedArticle('ca').content,
@@ -64,11 +94,21 @@ export default {
           // eslint-disable-next-line
          console.log(insert_articles_one);
           this.id = insert_articles_one.id
+          return this.$q.notify('Article desat correctament')
         }
       })
     },
     translatedArticle (lang) {
       return this.article.translations.find(t => t.language === lang)
+    }
+  },
+  watch: {
+    $route (to, from) {
+      console.log('to', to)
+      console.log('from', from)
+      if (to.fullPath === '/admin/article/edit') {
+        this.article = this.default
+      }
     }
   }
 
