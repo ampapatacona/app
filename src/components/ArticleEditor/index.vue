@@ -81,13 +81,14 @@
     <q-dialog v-model="dialog" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+          <q-avatar icon="save" color="primary" text-color="white" />
           <span class="q-ml-sm">El artículo se encuentra en estado de borrador. ¿Quieres solo guardar o guardar y publicar?</span>
         </q-card-section>
 
         <q-card-actions align="right">
+                    <q-btn flat label="Cancelar" color="primary" v-close-popup />
           <q-btn flat label="Solo guardar" @click="guardar(false)" color="primary" v-close-popup />
-          <q-btn flat label="Guardar y publicar" @click="guardar(true)" color="primary" v-close-popup />
+          <q-btn label="Guardar y publicar" @click="guardar(true)" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -158,6 +159,7 @@ export default {
   },
   methods: {
     preSave () {
+      if (!this.validation) return
       if (this.article.status === 'PUBLISHED') {
         return this.guardar()
       } else {

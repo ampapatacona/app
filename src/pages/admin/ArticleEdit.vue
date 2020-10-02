@@ -38,7 +38,7 @@ export default {
   },
   data () {
     return {
-      id: null,
+      id: undefined,
       article: null,
       default: {
         created_at: date.formatDate(new Date(), 'YYYY-MM-DD HH:mm'),
@@ -94,21 +94,15 @@ export default {
           // eslint-disable-next-line
          console.log(insert_articles_one);
           this.id = insert_articles_one.id
-          return this.$q.notify('Article desat correctament')
+          this.$q.notify('Article desat correctament')
+          if (this.$route.fullPath === '/admin/article/edit') {
+            return this.$router.replace('/admin/article/edit/' + this.id)
+          }
         }
       })
     },
     translatedArticle (lang) {
       return this.article.translations.find(t => t.language === lang)
-    }
-  },
-  watch: {
-    $route (to, from) {
-      console.log('to', to)
-      console.log('from', from)
-      if (to.fullPath === '/admin/article/edit') {
-        this.article = this.default
-      }
     }
   }
 

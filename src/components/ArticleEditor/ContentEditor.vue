@@ -269,7 +269,7 @@ p.is-empty:first-child::before {
 $color-black: rgb(32, 32, 32);
 $color-white: white;
 $color-grey: rgb(70, 70, 70);
-.editor {
+.ProseMirror {
   font-family: 'Karla', sans-serif;
   position: relative;
   // max-width: 800px;

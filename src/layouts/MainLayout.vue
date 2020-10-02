@@ -72,7 +72,7 @@
           </q-list>
           <q-list v-if="isAdmin">
             <q-separator />
-            <q-item to="/admin" clickable v-ripple>
+            <q-item to="/admin" clickable v-ripple exact>
               <q-item-section avatar>
                 <q-icon name="dashboard" />
               </q-item-section>
@@ -81,7 +81,7 @@
                 Admin
               </q-item-section>
             </q-item>
-            <q-item to="/admin/article/edit" clickable v-ripple>
+            <q-item to="/admin/article/edit" clickable v-ripple exact>
               <q-item-section avatar>
                 <q-icon name="dashboard" />
               </q-item-section>
