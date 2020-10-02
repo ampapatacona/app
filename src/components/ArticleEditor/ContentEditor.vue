@@ -1,7 +1,7 @@
 <template>
   <div class="editor">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, focused }">
-      <div class="menubar is-hidden" :class="{ 'is-focused': focused }">
+    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs}">
+      <div class="menubar">
 
         <q-btn
           icon="las la-bold"
@@ -41,7 +41,7 @@
 
         <q-btn
           icon="las la-link"
-          @click="openLinkModal(commands.link)"
+          @click="openLinkModal(commands.link, getMarkAttrs('link'))"
           :flat="!isActive.link()"
           color="primary"
           size="sm"
@@ -167,7 +167,7 @@
 
       </div>
     </editor-menu-bar>
-    <link-modal ref="linkModal" @command="linkSelected" @cancel="linkPrompt = false" :prompt="linkPrompt" />
+    <link-modal ref="linkModal" @command="linkSelected" @cancel="linkPrompt = false" :link="linkUrl" :prompt="linkPrompt" />
     <get-images ref="ytmodal" @cancel="getImagesPrompt = false" @command="imageSelected" :prompt="getImagesPrompt" />
 
     <editor-content :editor="editor" />
@@ -253,21 +253,18 @@ export default {
       editor: null,
       emitAfterOnUpdate: false,
       getImagesPrompt: false,
-      linkPrompt: false
+      linkPrompt: false,
+      linkMenuIsActive: false,
+      linkUrl: null
     }
   },
   methods: {
-    // addCommand(data) {
-    //   if (data.command !== null) {
-    //     data.command(data.data);
-    //   }
-    // },
     openModal (command) {
       this.$refs.ytmodal.setCommand(command)
       this.getImagesPrompt = true
     },
-    openLinkModal (command) {
-      this.$refs.linkModal.setCommand(command)
+    openLinkModal (command, url) {
+      this.$refs.linkModal.setCommand(command, url)
       this.linkPrompt = true
     },
     linkSelected (obj) {
@@ -317,13 +314,6 @@ export default {
 $color-black: rgb(32, 32, 32);
 $color-white: white;
 $color-grey: rgb(70, 70, 70);
-
-.is-hidden {
-  visibility: hidden;
-}
-.is-focused {
-  visibility: visible;
-}
 
 .ProseMirror{
   min-height: 300px;

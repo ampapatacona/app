@@ -7,12 +7,13 @@
         </q-card-section>
 
         <q-card-section class="q-gutter-md">
-          <q-input v-model="href" label="url" />
+          <q-input placeholder="https://" v-model="href" label="url" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancelar" @click="$emit('cancel')" />
-          <q-btn flat label="OK" @click="selectLink" />
+          <q-btn flat color="primary"  label="Cancelar" @click="$emit('cancel')" />
+          <q-btn flat color="primary"  @click="selectLink('remove')" label="Quitar" />
+          <q-btn color="primary" label="Establecer" @click="selectLink" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -21,9 +22,15 @@
 <script>
 
 export default {
+  created () {
+    if (this.link) {
+      this.href = this.link
+    }
+  },
 
   props: {
-    prompt: Boolean
+    prompt: Boolean,
+    link: String
   },
   data () {
     return {
@@ -32,11 +39,18 @@ export default {
     }
   },
   methods: {
-    setCommand (command) {
+    setCommand (command, attr) {
+      // console.log(attr.href)
       // Add the sent command
+      if (attr.href) {
+        this.href = attr.href
+      }
       this.command = command
     },
-    selectLink () {
+    selectLink (action) {
+      if (action === 'remove') {
+        this.href = null
+      }
       const obj = {
         href: this.href,
         command: this.command
