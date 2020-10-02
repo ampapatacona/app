@@ -1,74 +1,99 @@
 <template>
   <form class="article-editor">
-    <div class="row">
-      <div class="col-12">
-        <q-input borderless ref="title" class="title-input" v-model="article.translations.find(t => t.language === lang).title" :placeholder="$t('title')" :rules="[val => !!val || $t('required')]" />
-      </div>
-    </div>
+    <main class="row">
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-12">
+            <q-input borderless ref="title" class="title-input" v-model="article.translations.find(t => t.language === lang).title" :placeholder="$t('title')" :rules="[val => !!val || $t('required')]" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <content-editor v-model="article.translations.find(t => t.language === lang).content" @input="content" />
+          </div>
+        </div>
 
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <q-input filled v-model="article.created_at">
-          <template v-slot:prepend>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-date v-model="article.created_at" mask="YYYY-MM-DD HH:mm">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
+      </div> <!-- Fin columna principal -->
 
-          <template v-slot:append>
-            <q-icon name="access_time" class="cursor-pointer">
-              <q-popup-proxy transition-show="scale" transition-hide="scale">
-                <q-time v-model="article.created_at" mask="YYYY-MM-DD HH:mm" format24h>
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
-                  </div>
-                </q-time>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
-      </div>
-    </div><!--  datetime row -->
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-12">
+            <q-select outlined v-model="lang" :options="langOptions" label="Selecciona idioma a editar" emit-value map-options />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <q-select outlined v-model="article.status" :options="statusOptions" label="Status" emit-value map-options />
+          </div>
+        </div>
 
-    <div class="row" v-if="article.image">
-      <q-img
-      :src="article.image"
-      style="height: 140px; max-width: 150px"
-      >
-      </q-img>
-    </div>
+        <div class="row">
+          <div class="col-12">
+            <q-input filled v-model="article.created_at">
+              <template v-slot:prepend>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-date v-model="article.created_at" mask="YYYY-MM-DD HH:mm">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
 
-    <div class="row" v-if="!article.image">
-      <div class="col">
-        <firebase-uploader @added="imageAdded" @removed="imageRemoved" @upload="uploadImage" :label="$t('image')" ref="uploader" hide-upload-btn></firebase-uploader>
-      </div>
-    </div>
+              <template v-slot:append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy transition-show="scale" transition-hide="scale">
+                    <q-time v-model="article.created_at" mask="YYYY-MM-DD HH:mm" format24h>
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-time>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </div><!--  datetime row -->
 
-    <div class="row q-col-gutter-sm">
-      <div class="col-xs-12 col-sm-6">
-        <q-select outlined v-model="lang" :options="langOptions" label="Idioma" emit-value map-options />
-      </div>
-      <div class="col-xs-12 col-sm-6">
-        <q-select outlined v-model="article.status" :options="statusOptions" label="Status" emit-value map-options />
-      </div>
-    </div>
-    <div class="row">
-      <!-- <div class="col-12 col-md-8">
-        <q-editor ref="content" :definitions="definitions" :toolbar="toolbar" v-model="article.translations.find(t => t.language === lang).content" min-height="10rem" />
-      </div> -->
-      <div class="col-12">
-        <content-editor v-model="article.translations.find(t => t.language === lang).content" @input="content" />
-      </div>
+        <div class="row" v-if="article.image">
+          <div class="image-wrapper">
+            <q-img
+            class="article-image"
+            :src="article.image"
+            >
+            </q-img>
+            <q-btn class="remove-button" round flat size="xm" color="primary" @click="deleteImage" icon="delete">
+            </q-btn>
+          </div>
+        </div>
 
-    </div>
+        <div class="row" v-if="!article.image">
+          <div class="col">
+            <firebase-uploader @added="imageAdded" @removed="imageRemoved" @upload="uploadImage" :label="$t('image')" ref="uploader" hide-upload-btn></firebase-uploader>
+          </div>
+        </div>
 
-    <q-btn @click="guardar">{{$t('save')}}</q-btn>
+      </div> <!-- Fin columna lateral -->
+    </main>
+
+    <q-dialog v-model="dialog" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+          <span class="q-ml-sm">El artículo se encuentra en estado de borrador. ¿Quieres solo guardar o guardar y publicar?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Solo guardar" @click="guardar(false)" color="primary" v-close-popup />
+          <q-btn flat label="Guardar y publicar" @click="guardar(true)" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab icon="save" color="primary" @click="preSave" />
+    </q-page-sticky>
   </form>
 </template>
 <i18n>
@@ -95,6 +120,8 @@
 <script>
 import FirebaseUploader from './FirebaseUploader.js'
 import ContentEditor from './ContentEditor'
+import firebase from 'firebase/app'
+import 'firebase/storage'
 
 export default {
   name: 'ArticleEditor',
@@ -105,6 +132,7 @@ export default {
 
   data () {
     return {
+      dialog: false,
       image: null,
       pendingImages: false,
       triggerUpload: false,
@@ -129,6 +157,13 @@ export default {
     }
   },
   methods: {
+    preSave () {
+      if (this.article.status === 'PUBLISHED') {
+        return this.guardar()
+      } else {
+        this.dialog = true
+      }
+    },
     content (val) {
       // console.log(val)
       const lang = this.lang
@@ -136,8 +171,11 @@ export default {
         this.article.translations.find(t => t.language === lang).content = val
       }
     },
-    guardar () {
+    guardar (publicar) {
       if (!this.validation) return
+      if (publicar) {
+        this.article.status = 'PUBLISHED'
+      }
       const article = this.article
       if (this.id) {
         article.id = this.id
@@ -151,8 +189,17 @@ export default {
     imageRemoved () {
       this.pendingImages = false
     },
+    deleteImage () {
+      // const ref = this.getPathStorageFromUrl(this.article.image)
+      const refFromUrl = firebase.storage().refFromURL(this.article.image)
+      refFromUrl.delete().then(() => {
+        this.article.image = null
+        return this.guardar()
+      })
+        .catch(err => this.$notify(err))
+    },
     uploadImage (obj) {
-      console.log(obj)
+      // console.log(obj)
       const article = this.article
       article.image = obj.url
       this.$emit('guardar', article)
@@ -162,8 +209,18 @@ export default {
 </script>
 
 <style lang="scss">
+.image-wrapper {
+  position: relative;
+  width: 100%;
+}
+.remove-button {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+}
 .q-uploader {
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .title-input {
