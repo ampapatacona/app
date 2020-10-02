@@ -1,7 +1,7 @@
 <template>
   <div class="editor">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div class="menubar">
+    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, focused }">
+      <div class="menubar is-hidden" :class="{ 'is-focused': focused }">
 
         <q-btn
           icon="las la-bold"
@@ -317,6 +317,13 @@ export default {
 $color-black: rgb(32, 32, 32);
 $color-white: white;
 $color-grey: rgb(70, 70, 70);
+
+.is-hidden {
+  visibility: hidden;
+}
+.is-focused {
+  visibility: visible;
+}
 
 .ProseMirror{
   min-height: 300px;
