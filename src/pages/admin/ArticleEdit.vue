@@ -91,8 +91,7 @@ export default {
         // eslint-disable-next-line camelcase
         update: (cache, { data: { insert_articles_one } }) => {
           // Read the data from our cache for this query.
-          // eslint-disable-next-line
-         console.log(insert_articles_one);
+          // console.log(insert_articles_one)
           this.id = insert_articles_one.id
           this.$q.notify('Article desat correctament')
           if (this.$route.fullPath === '/admin/article/edit') {
