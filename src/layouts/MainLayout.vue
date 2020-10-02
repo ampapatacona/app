@@ -72,22 +72,13 @@
           </q-list>
           <q-list v-if="isAdmin">
             <q-separator />
-            <q-item to="/admin" clickable v-ripple exact>
+            <q-item to="/admin/articles" clickable v-ripple exact>
               <q-item-section avatar>
-                <q-icon name="dashboard" />
+                <q-icon name="las la-newspaper" />
               </q-item-section>
 
               <q-item-section>
-                Admin
-              </q-item-section>
-            </q-item>
-            <q-item to="/admin/article/edit" clickable v-ripple exact>
-              <q-item-section avatar>
-                <q-icon name="dashboard" />
-              </q-item-section>
-
-              <q-item-section>
-                Add article
+                Blog
               </q-item-section>
             </q-item>
           </q-list>

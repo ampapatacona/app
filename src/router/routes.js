@@ -23,7 +23,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresScope: 'admin', requiresAuth: true },
     children: [
-      { path: '', component: () => import('pages/admin/Index.vue') },
+      { path: 'articles', component: () => import('pages/admin/Articles.vue') },
       { path: 'article/edit', component: () => import('pages/admin/ArticleEdit.vue') },
       { path: 'article/edit/:id', component: () => import('pages/admin/ArticleEdit.vue') }
     ]

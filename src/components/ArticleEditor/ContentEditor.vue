@@ -253,23 +253,19 @@ export default {
 </i18n>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
-.ProseMirror{
-  min-height: 300px;
-  padding: 1rem;
-}
-
-p.is-empty:first-child::before {
-  content: attr(data-empty-text);
-  float: left;
-  color: lightgray;
-  pointer-events: none;
-  height: 0;
-}
-
 $color-black: rgb(32, 32, 32);
 $color-white: white;
 $color-grey: rgb(70, 70, 70);
-.ProseMirror {
+
+.ProseMirror{
+  min-height: 300px;
+  padding: 1rem;
+
+  blockquote {
+    background-color: #f5f5f5;
+    border-left: 5px solid #dbdbdb;
+    padding: 1.25em 1.5em;
+  }
   font-family: 'Karla', sans-serif;
   position: relative;
   // max-width: 800px;
@@ -395,4 +391,13 @@ $color-grey: rgb(70, 70, 70);
 
   }
 }
+
+p.is-empty:first-child::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: lightgray;
+  pointer-events: none;
+  height: 0;
+}
+
 </style>

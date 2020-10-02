@@ -1,0 +1,17 @@
+query getArticles {
+  articles {
+    created_at
+    author {
+      firstname
+    }
+    id
+    image
+    status
+    translations {
+      content
+      language
+      slug
+      title
+    }
+  }
+}
