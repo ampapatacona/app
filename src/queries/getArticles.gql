@@ -1,17 +1,25 @@
-query getArticles {
-  articles {
-    created_at
+query getArticles($filter: String, $limit: Int, $offset: Int, $order_by: [articles_order_by!] = {created_at: desc}) {
+  articles_aggregate {
+    aggregate {
+      count
+    }
+  }
+  articles(order_by: $order_by, limit: $limit, offset: $offset, where: {translations: {_or: {content: {_ilike: $filter}, title: {_ilike: $filter}}}}) {
     author {
       firstname
     }
+    created_at
     id
     image
     status
+    updated_at
     translations {
-      content
-      language
       slug
+      language
       title
+      content
     }
   }
 }
+
+
