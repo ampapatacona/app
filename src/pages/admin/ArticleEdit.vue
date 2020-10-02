@@ -32,6 +32,10 @@ export default {
           this.article = article
           this.id = Number(id)
         })
+        .catch(err => {
+          console.error(err)
+          this.$router.push('/404')
+        })
     } else {
       this.article = this.default
     }
