@@ -1,6 +1,6 @@
 <template>
   <form class="article-editor">
-    <main class="row">
+    <main class="row q-col-gutter-sm">
       <div class="col-md-8">
         <div class="row">
           <div class="col-12">
@@ -58,20 +58,24 @@
         </div><!--  datetime row -->
 
         <div class="row" v-if="article.image">
-          <div class="image-wrapper">
+          <div class="image-wrapper-2">
             <q-img
-            class="article-image"
-            :src="article.image"
+              class="article-image cursor-pointer"
+              :src="article.image"
+              @click="getImagesPrompt = true"
             >
             </q-img>
-            <q-btn class="remove-button" round flat size="xm" color="primary" @click="deleteImage" icon="delete">
-            </q-btn>
+            <q-btn class="remove-button" round flat size="xm" color="primary" @click="removeImage"  label="X" />
           </div>
+        </div>
+
+        <div>
+          <get-images @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" />
         </div>
 
         <div class="row" v-if="!article.image">
           <div class="col">
-            <firebase-uploader @added="imageAdded" @removed="imageRemoved" @upload="uploadImage" :label="$t('image')" ref="uploader" hide-upload-btn></firebase-uploader>
+            <q-btn @click="getImagesPrompt = true" color="accent" label="Añadir imagen de portada" />
           </div>
         </div>
 
@@ -119,22 +123,23 @@
 </i18n>
 
 <script>
-import FirebaseUploader from './FirebaseUploader.js'
 import ContentEditor from './ContentEditor'
+import GetImages from './GetImages'
 import firebase from 'firebase/app'
 import 'firebase/storage'
 
 export default {
   name: 'ArticleEditor',
   components: {
-    FirebaseUploader,
-    ContentEditor
+    ContentEditor,
+    GetImages
   },
 
   data () {
     return {
       dialog: false,
       image: null,
+      getImagesPrompt: false,
       pendingImages: false,
       triggerUpload: false,
       lang: 'es',
@@ -158,6 +163,11 @@ export default {
     }
   },
   methods: {
+    imageSelected (image) {
+      // console.log(image)
+      this.article.image = image
+      this.getImagesPrompt = false
+    },
     preSave () {
       if (!this.validation) return
       if (this.article.status === 'PUBLISHED') {
@@ -191,6 +201,9 @@ export default {
     imageRemoved () {
       this.pendingImages = false
     },
+    removeImage () {
+      this.article.image = null
+    },
     deleteImage () {
       // const ref = this.getPathStorageFromUrl(this.article.image)
       const refFromUrl = firebase.storage().refFromURL(this.article.image)
@@ -211,14 +224,9 @@ export default {
 </script>
 
 <style lang="scss">
-.image-wrapper {
+.image-wrapper-2 {
   position: relative;
   width: 100%;
-}
-.remove-button {
-  position: absolute;
-  top: 2px;
-  left: 5px;
 }
 .q-uploader {
   margin-bottom: 1rem;

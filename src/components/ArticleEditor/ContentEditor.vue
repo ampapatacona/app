@@ -266,14 +266,13 @@ $color-grey: rgb(70, 70, 70);
     border-left: 5px solid #dbdbdb;
     padding: 1.25em 1.5em;
   }
+
   font-family: 'Karla', sans-serif;
   position: relative;
   // max-width: 800px;
   // margin: 0 auto 5rem auto;
   font-size: 1.1rem;
   line-height: 1.2;
-
-  &__content {
 
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -317,18 +316,8 @@ $color-grey: rgb(70, 70, 70);
     }
 
     a {
-      color: inherit;
-    }
-
-    blockquote {
-      border-left: 3px solid rgba($color-black, 0.1);
-      color: rgba($color-black, 0.8);
-      padding-left: 0.8rem;
-      font-style: italic;
-
-      p {
-        margin: 0;
-      }
+      color: $primary;
+      text-decoration: none;
     }
 
     img {
@@ -390,7 +379,6 @@ $color-grey: rgb(70, 70, 70);
     }
 
   }
-}
 
 p.is-empty:first-child::before {
   content: attr(data-empty-text);
