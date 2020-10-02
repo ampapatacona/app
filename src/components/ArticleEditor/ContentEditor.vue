@@ -41,7 +41,7 @@
 
         <q-btn
           icon="las la-link"
-          @click="commands.link"
+          @click="openLinkModal(commands.link)"
           :flat="!isActive.link()"
           color="primary"
           size="sm"
@@ -130,6 +130,15 @@
         />
 
         <q-btn
+          icon="las la-image"
+          @click="openModal(commands.image)"
+          :flat="!isActive.image()"
+          color="primary"
+          size="sm"
+          round
+        />
+
+        <q-btn
           icon="las la-ruler-horizontal"
           @click="commands.horizontal_rule"
           color="primary"
@@ -158,6 +167,8 @@
 
       </div>
     </editor-menu-bar>
+    <link-modal ref="linkModal" @command="linkSelected" @cancel="linkPrompt = false" :prompt="linkPrompt" />
+    <get-images ref="ytmodal" @cancel="getImagesPrompt = false" @command="imageSelected" :prompt="getImagesPrompt" />
 
     <editor-content :editor="editor" />
   </div>
@@ -165,6 +176,9 @@
 
 <script>
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import GetImages from './GetImages'
+import LinkModal from './LinkModal'
+
 import {
   Blockquote,
   CodeBlock,
@@ -183,12 +197,15 @@ import {
   Strike,
   Underline,
   History,
-  Placeholder
+  Placeholder,
+  Image
 } from 'tiptap-extensions'
 export default {
   components: {
     EditorContent,
-    EditorMenuBar
+    EditorMenuBar,
+    GetImages,
+    LinkModal
   },
   props: ['value'],
   mounted () {
@@ -211,6 +228,7 @@ export default {
         new Strike(),
         new Underline(),
         new History(),
+        new Image(),
         new Placeholder({ emptyNodeText: this.$t('placeholder') })
       ],
       content: this.value,
@@ -233,7 +251,50 @@ export default {
   data () {
     return {
       editor: null,
-      emitAfterOnUpdate: false
+      emitAfterOnUpdate: false,
+      getImagesPrompt: false,
+      linkPrompt: false
+    }
+  },
+  methods: {
+    // addCommand(data) {
+    //   if (data.command !== null) {
+    //     data.command(data.data);
+    //   }
+    // },
+    openModal (command) {
+      this.$refs.ytmodal.setCommand(command)
+      this.getImagesPrompt = true
+    },
+    openLinkModal (command) {
+      this.$refs.linkModal.setCommand(command)
+      this.linkPrompt = true
+    },
+    linkSelected (obj) {
+      const data = {
+        command: obj.command,
+        data: {
+          href: obj.href
+        }
+      }
+      if (data.command !== null) {
+        data.command(data.data)
+      }
+      this.linkPrompt = false
+    },
+    imageSelected (obj) {
+      const data = {
+        command: obj.command,
+        data: {
+          src: obj.image
+          // alt: "YOU CAN ADD ALT",
+          // title: "YOU CAN ADD TITLE"
+        }
+      }
+      if (data.command !== null) {
+        data.command(data.data)
+      }
+      this.getImagesPrompt = false
     }
   },
   beforeDestroy () {

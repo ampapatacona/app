@@ -42,11 +42,21 @@ export default {
   data () {
     return {
       images: [],
-      pendingImages: false
+      pendingImages: false,
+      command: null
     }
   },
   methods: {
+    setCommand (command) {
+      // Add the sent command
+      this.command = command
+    },
     selectImage (image) {
+      const obj = {
+        image: image,
+        command: this.command
+      }
+      this.$emit('command', obj)
       this.$emit('selected', image)
     },
     getImages () {
