@@ -69,7 +69,7 @@ export default {
         {
           name: 'created_at',
           required: true,
-          label: 'Date',
+          label: 'Fecha',
           align: 'left',
           field: 'created_at',
           format: val => `${this.formatDate(val)}`,
@@ -104,7 +104,7 @@ export default {
       return [day, month, year].join('/')
     },
     onRequest (props) {
-      console.log('props', props)
+      // console.log('props', props)
       this.loading = true
       const {
         page,
@@ -141,7 +141,7 @@ export default {
           // }
         },
         update (data) {
-          console.log('data', data)
+          // console.log('data', data)
           // console.log('this.projectsData', this.projectsData)
           this.pagination.page = page
           this.pagination.rowsPerPage = rowsPerPage

@@ -1,8 +1,9 @@
 <template>
   <q-page class="flex flex-center">
-    <div v-if="$store.state.user && $store.state.user.user">
+    <h2>En construcción</h2>
+    <!-- <div v-if="$store.state.user && $store.state.user.user">
       {{ $store.state.user.user.email }}
-    </div>
+    </div> -->
   </q-page>
 </template>
 

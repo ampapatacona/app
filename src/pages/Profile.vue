@@ -1,8 +1,9 @@
 <template>
   <q-page padding>
-    <h2 class="text-center">Profile</h2>
+    <h2 class="text-center">Datos personales</h2>
+    <h3>En construcción</h3>
     <div v-if="$store.state.user && $store.state.user.user">
-      {{ $store.state.user.user.email }}
+      Email: {{ $store.state.user.user.email }}
     </div>
   </q-page>
 </template>

@@ -36,7 +36,7 @@
               </q-item-section>
 
               <q-item-section>
-                Inici
+                Inicio
               </q-item-section>
             </q-item>
 
@@ -46,27 +46,27 @@
               </q-item-section>
 
               <q-item-section>
-                Profile
+                Datos personales
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple>
+            <q-item clickable v-ripple disabled>
               <q-item-section avatar>
-                <q-icon name="send" />
+                <q-icon name="las la-shapes" />
               </q-item-section>
 
               <q-item-section>
-                Send
+                Extraescolares
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-ripple>
+            <q-item clickable v-ripple disabled>
               <q-item-section avatar>
-                <q-icon name="drafts" />
+                <q-icon name="las la-clock" />
               </q-item-section>
 
               <q-item-section>
-                Drafts
+                Matinera
               </q-item-section>
             </q-item>
           </q-list>
